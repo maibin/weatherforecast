@@ -7,16 +7,21 @@
 //
 
 import UIKit
+import MapKit
 
 var locationString:String = "";
 
-class First3DaysController: UIViewController, UITextFieldDelegate  {
+class First3DaysController: UIViewController, UITextFieldDelegate, CLLocationManagerDelegate  {
 
     @IBOutlet weak var location: UITextField!
     
     @IBOutlet weak var webView: UIWebView!
     
     @IBOutlet weak var label: UILabel!
+    
+    var locationManager = CLLocationManager();
+    
+    var userLocation:CLLocation = CLLocation(latitude: 0, longitude: 0);
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,9 +31,37 @@ class First3DaysController: UIViewController, UITextFieldDelegate  {
             locationString = (NSUserDefaults.standardUserDefaults().objectForKey("location") as? String)!;
         }
         self.location.delegate = self;
+        self.locationManager.delegate = self;
+        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+        self.locationManager.requestWhenInUseAuthorization();
+        self.locationManager.startUpdatingLocation();
         self.location.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged);
     }
     
+    func checkAddressFromLocation(){
+        CLGeocoder().reverseGeocodeLocation(userLocation) { (placemarks, error) -> Void in
+            if (error != nil) {
+                print("Reverse geocoder failed");
+                return
+            }
+            
+            if placemarks!.count > 0 {
+                let pm = placemarks![0] as CLPlacemark
+                print(pm.locality);
+                self.location.text = pm.locality!;
+                locationString = self.location.text!;
+                loadWeatherConditions(0, location: self.location, webView: self.webView, label: self.label, viewController: self);
+            }
+        }
+    }
+    
+    @IBAction func updateLocation(sender: AnyObject) {
+        checkAddressFromLocation();
+    }
+    
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        userLocation = locations[0];
+    }
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -41,67 +74,20 @@ class First3DaysController: UIViewController, UITextFieldDelegate  {
     
     override func viewDidAppear(animated: Bool) {
         location.text = locationString;
-        loadWeatherConditions();
+        loadWeatherConditions(0, location: self.location, webView: self.webView, label: self.label, viewController: self);
+        self.locationManager.stopUpdatingLocation();
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         self.view.endEditing(true);
-        loadWeatherConditions();
-    }
-    
-    func loadWeatherConditions(){
-        if (locationString != ""){
-            NSUserDefaults.standardUserDefaults().setObject(locationString, forKey: "location");
-            let url = NSURL(string: "http://www.weather-forecast.com/locations/" + checkForSpecialDigits(location) + "/forecasts/latest")!;
-            
-            let task = NSURLSession.sharedSession().dataTaskWithURL(url) { (data, response, error) -> Void in
-                //will happen when task completes
-                
-                if let urlContent = data {
-                    
-                    let webContent = NSString(data: urlContent, encoding: NSUTF8StringEncoding)
-                    
-                    let webArray = webContent?.componentsSeparatedByString("<a class=\"units imperial\">&deg;F</a></div>");
-                    let initArray = webContent?.componentsSeparatedByString("<link href=\"/favicon.ico\"")
-                    
-                    if !webArray![0].containsString("You may have mistyped the address"){
-                        
-                        let weatherArray = webArray![1].componentsSeparatedByString("</div><p class=\"local-time-line\">");
-                        
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            self.webView.loadHTMLString(String(initArray![0] + weatherArray[0]), baseURL: nil);
-                            self.label.hidden = true;
-                        })
-                        
-                    } else {
-                        if (self.location.text! != ""){
-                            self.createAnAlert("There is no \(self.location.text!) in our database, please provide different city");
-                        }
-                    }
-                }
-            }
-            task.resume();
-        } else {
-            location.placeholder = "Type a location, e.g. London, Vancouver";
-        }
+        loadWeatherConditions(0, location: self.location, webView: self.webView, label: self.label, viewController: self);
     }
     
     func textFieldShouldReturn(text: UITextField) -> Bool {
-        loadWeatherConditions();
+        loadWeatherConditions(0, location: self.location, webView: self.webView, label: self.label, viewController: self);
         text.resignFirstResponder()
         return true;
     }
-    
-    func checkForSpecialDigits(text: UITextField) -> String {
-        return (text.text!.lowercaseString.stringByReplacingOccurrencesOfString(" ", withString: "-").stringByReplacingOccurrencesOfString("ą", withString: "a").stringByReplacingOccurrencesOfString("ć", withString: "c").stringByReplacingOccurrencesOfString("ę", withString: "e").stringByReplacingOccurrencesOfString("ł", withString: "l").stringByReplacingOccurrencesOfString("ń", withString: "n").stringByReplacingOccurrencesOfString("ó", withString: "o").stringByReplacingOccurrencesOfString("ś", withString: "s").stringByReplacingOccurrencesOfString("ż", withString: "z").stringByReplacingOccurrencesOfString("ź:", withString: "z"));
-    }
-    
-    func createAnAlert(message: String){
-        let alertController = UIAlertController(title: "Invalid parameter", message:
-            message, preferredStyle: UIAlertControllerStyle.Alert)
-        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default,handler: nil))
-        
-        self.presentViewController(alertController, animated: true, completion: nil)
-    }
+
 }
 

@@ -40,67 +40,19 @@ class Third3DaysController: UIViewController, UITextFieldDelegate  {
     
     override func viewDidAppear(animated: Bool) {
         location.text = locationString;
-        loadWeatherConditions();
+        loadWeatherConditions(2, location: self.location, webView: self.webView, label: self.label, viewController: self);
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         self.view.endEditing(true);
-        loadWeatherConditions();
-    }
-    
-    func loadWeatherConditions(){
-        if (locationString != ""){
-            NSUserDefaults.standardUserDefaults().setObject(locationString, forKey: "location");
-            let url = NSURL(string: "http://www.weather-forecast.com/locations/" + checkForSpecialDigits(location) + "/forecasts/latest")!;
-            
-            let task = NSURLSession.sharedSession().dataTaskWithURL(url) { (data, response, error) -> Void in
-                //will happen when task completes
-                
-                if let urlContent = data {
-                    
-                    let webContent = NSString(data: urlContent, encoding: NSUTF8StringEncoding)
-                    
-                    let webArray = webContent?.componentsSeparatedByString("<div class=\"forecast-cont\"><table class=\"forecasts\">");
-                    let initArray = webContent?.componentsSeparatedByString("<link href=\"/favicon.ico\"")
-                    
-                    if !webArray![0].containsString("You may have mistyped the address"){
-                        
-                        let weatherArray = webArray![2].componentsSeparatedByString("</div><div class=\"not_in_print centered-b b-with-whitespace\">");
-                        
-                        dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                            self.webView.loadHTMLString(String(initArray![0] + "<table class=\"forecasts\">" + weatherArray[0]), baseURL: nil);
-                            self.label.hidden = true;
-                        })
-                        
-                    } else {
-                        if (self.location.text! != ""){
-                            self.createAnAlert("There is no \(self.location.text!) in our database, please provide different city");
-                        }
-                    }
-                }
-            }
-            task.resume();
-        } else {
-            location.placeholder = "Type a location, e.g. London, Vancouver";
-        }
+        loadWeatherConditions(2, location: self.location, webView: self.webView, label: self.label, viewController: self);
     }
     
     func textFieldShouldReturn(text: UITextField) -> Bool {
-        loadWeatherConditions();
+        loadWeatherConditions(2, location: self.location, webView: self.webView, label: self.label, viewController: self);
         text.resignFirstResponder()
         return true;
     }
-    
-    func checkForSpecialDigits(text: UITextField) -> String {
-        return (text.text!.lowercaseString.stringByReplacingOccurrencesOfString(" ", withString: "-").stringByReplacingOccurrencesOfString("ą", withString: "a").stringByReplacingOccurrencesOfString("ć", withString: "c").stringByReplacingOccurrencesOfString("ę", withString: "e").stringByReplacingOccurrencesOfString("ł", withString: "l").stringByReplacingOccurrencesOfString("ń", withString: "n").stringByReplacingOccurrencesOfString("ó", withString: "o").stringByReplacingOccurrencesOfString("ś", withString: "s").stringByReplacingOccurrencesOfString("ż", withString: "z").stringByReplacingOccurrencesOfString("ź:", withString: "z"));
-    }
-    
-    func createAnAlert(message: String){
-        let alertController = UIAlertController(title: "Invalid parameter", message:
-            message, preferredStyle: UIAlertControllerStyle.Alert)
-        alertController.addAction(UIAlertAction(title: "Dismiss", style: UIAlertActionStyle.Default,handler: nil))
-        
-        self.presentViewController(alertController, animated: true, completion: nil)
-    }
+
 }
 

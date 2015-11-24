@@ -41,6 +41,10 @@
 	</array>
 	<key>UIStatusBarHidden</key>
 	<false/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We want to obtain your location to track your ride.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Sharing your location...</string>
 	<key>UIStatusBarTintParameters</key>
 	<dict>
 		<key>UINavigationBar</key>
