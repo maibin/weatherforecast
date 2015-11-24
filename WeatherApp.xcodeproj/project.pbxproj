@@ -14,6 +14,7 @@
 		9023A91B1BE9EBFA001C4E54 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9023A9191BE9EBFA001C4E54 /* Main.storyboard */; };
 		9023A9201BE9EBFA001C4E54 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9023A91E1BE9EBFA001C4E54 /* LaunchScreen.storyboard */; };
 		90AE70741BEB3BB000CE61D3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 90AE70731BEB3BB000CE61D3 /* Images.xcassets */; };
+		90E5B9801C04D3B60091B72F /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90E5B97F1C04D3B60091B72F /* CoreLocation.framework */; };
 		90E7305F1BEAD1D300609A5B /* Third3DaysController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90E7305E1BEAD1D300609A5B /* Third3DaysController.swift */; };
 		90F55AE81BEEDCA2001AAF68 /* default.png in Resources */ = {isa = PBXBuildFile; fileRef = 90F55AE71BEEDCA2001AAF68 /* default.png */; };
 /* End PBXBuildFile section */
@@ -28,6 +29,7 @@
 		9023A91F1BE9EBFA001C4E54 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		9023A9211BE9EBFA001C4E54 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		90AE70731BEB3BB000CE61D3 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		90E5B97F1C04D3B60091B72F /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		90E7305E1BEAD1D300609A5B /* Third3DaysController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Third3DaysController.swift; sourceTree = "<group>"; };
 		90F55AE71BEEDCA2001AAF68 /* default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = default.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -37,6 +39,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				90E5B9801C04D3B60091B72F /* CoreLocation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -55,6 +58,7 @@
 		9023A9071BE9EBFA001C4E54 = {
 			isa = PBXGroup;
 			children = (
+				90E5B97F1C04D3B60091B72F /* CoreLocation.framework */,
 				9023A9121BE9EBFA001C4E54 /* WeatherApp */,
 				9023A9111BE9EBFA001C4E54 /* Products */,
 			);
