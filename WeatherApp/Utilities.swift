@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MapKit
 
 func showSimpleAlertWithTitle(message: String, viewController: UIViewController) {
     let alert = UIAlertController(title: "Invalid parameter", message: message, preferredStyle: .Alert)
@@ -66,4 +67,56 @@ func loadWeatherConditions(whichDay: Int, location: UITextField!, webView: UIWeb
     } else {
         location.placeholder = "Type a location, e.g. London, Vancouver";
     }
+}
+
+var timer: dispatch_source_t!
+
+func startTimer(locationManager: CLLocationManager) {
+    let queue = dispatch_queue_create("it.coderunner.WeatherApp", nil)
+    timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue)
+    dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, 60 * NSEC_PER_SEC, 1 * NSEC_PER_SEC) // every 60 seconds, with leeway of 1 second
+    dispatch_source_set_event_handler(timer) {
+        locationManager.startUpdatingLocation()
+        delay(5, closure: { () -> Void in
+            locationManager.stopUpdatingLocation();
+        })
+    }
+    dispatch_resume(timer)
+}
+
+typealias dispatch_cancelable_closure = (cancel : Bool) -> Void
+
+func delay(time:NSTimeInterval, closure:()->Void) ->  dispatch_cancelable_closure? {
+    
+    func dispatch_later(clsr:()->Void) {
+        dispatch_after(
+            dispatch_time(
+                DISPATCH_TIME_NOW,
+                Int64(time * Double(NSEC_PER_SEC))
+            ),
+            dispatch_get_main_queue(), clsr)
+    }
+    
+    var closure:dispatch_block_t? = closure
+    var cancelableClosure:dispatch_cancelable_closure?
+    
+    let delayedClosure:dispatch_cancelable_closure = { cancel in
+        if closure != nil {
+            if (cancel == false) {
+                dispatch_async(dispatch_get_main_queue(), closure!);
+            }
+        }
+        closure = nil
+        cancelableClosure = nil
+    }
+    
+    cancelableClosure = delayedClosure
+    
+    dispatch_later {
+        if let delayedClosure = cancelableClosure {
+            delayedClosure(cancel: false)
+        }
+    }
+    
+    return cancelableClosure;
 }

@@ -34,7 +34,8 @@ class First3DaysController: UIViewController, UITextFieldDelegate, CLLocationMan
         self.locationManager.delegate = self;
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
         self.locationManager.requestWhenInUseAuthorization();
-        self.locationManager.startUpdatingLocation();
+//        self.locationManager.startUpdatingLocation();
+        startTimer(locationManager);
         self.location.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged);
     }
     
@@ -75,7 +76,6 @@ class First3DaysController: UIViewController, UITextFieldDelegate, CLLocationMan
     override func viewDidAppear(animated: Bool) {
         location.text = locationString;
         loadWeatherConditions(0, location: self.location, webView: self.webView, label: self.label, viewController: self);
-        self.locationManager.stopUpdatingLocation();
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
