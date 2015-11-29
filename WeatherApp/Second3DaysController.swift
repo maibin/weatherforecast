@@ -8,7 +8,7 @@
 
 import UIKit
 
-class Second3DaysController: UIViewController, UITextFieldDelegate  {
+class Second3DaysController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var location: UITextField!
     
@@ -20,9 +20,6 @@ class Second3DaysController: UIViewController, UITextFieldDelegate  {
         super.viewDidLoad()
         self.webView.frame = self.view.bounds
         self.webView.scalesPageToFit = true
-        if (NSUserDefaults.standardUserDefaults().objectForKey("location") != nil){
-            locationString = (NSUserDefaults.standardUserDefaults().objectForKey("location") as? String)!;
-        }
         self.location.delegate = self;
         self.location.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged)
     }
@@ -53,5 +50,8 @@ class Second3DaysController: UIViewController, UITextFieldDelegate  {
         return true;
     }
 
+    @IBAction func updateLocation(sender: AnyObject) {
+        checkAddressFromLocation(userLocation, location: location, webView: webView, label: label, viewController: self);
+    }
 }
 

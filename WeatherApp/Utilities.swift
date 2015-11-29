@@ -9,6 +9,12 @@
 import UIKit
 import MapKit
 
+
+var timer: dispatch_source_t!
+var locationString:String = "";
+
+var userLocation:CLLocation = CLLocation(latitude: 0, longitude: 0);
+
 func showSimpleAlertWithTitle(message: String, viewController: UIViewController) {
     let alert = UIAlertController(title: "Invalid parameter", message: message, preferredStyle: .Alert)
     let action = UIAlertAction(title: "OK", style: .Cancel, handler: nil)
@@ -69,12 +75,27 @@ func loadWeatherConditions(whichDay: Int, location: UITextField!, webView: UIWeb
     }
 }
 
-var timer: dispatch_source_t!
+func checkAddressFromLocation(userLocation:CLLocation, location: UITextField, webView: UIWebView!, label: UILabel!, viewController: UIViewController){
+    CLGeocoder().reverseGeocodeLocation(userLocation) { (placemarks, error) -> Void in
+        if (error != nil) {
+            print("Reverse geocoder failed");
+            return
+        }
+        
+        if placemarks!.count > 0 {
+            let pm = placemarks![0] as CLPlacemark
+            print(pm.locality);
+            location.text = pm.locality!;
+            locationString = location.text!;
+            loadWeatherConditions(0, location: location, webView: webView, label: label, viewController: viewController);
+        }
+    }
+}
 
 func startTimer(locationManager: CLLocationManager) {
     let queue = dispatch_queue_create("it.coderunner.WeatherApp", nil)
     timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue)
-    dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, 60 * NSEC_PER_SEC, 1 * NSEC_PER_SEC) // every 60 seconds, with leeway of 1 second
+    dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, 600 * NSEC_PER_SEC, 1 * NSEC_PER_SEC) // every 60 seconds, with leeway of 1 second
     dispatch_source_set_event_handler(timer) {
         locationManager.startUpdatingLocation()
         delay(5, closure: { () -> Void in

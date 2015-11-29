@@ -9,8 +9,6 @@
 import UIKit
 import MapKit
 
-var locationString:String = "";
-
 class First3DaysController: UIViewController, UITextFieldDelegate, CLLocationManagerDelegate  {
 
     @IBOutlet weak var location: UITextField!
@@ -20,8 +18,6 @@ class First3DaysController: UIViewController, UITextFieldDelegate, CLLocationMan
     @IBOutlet weak var label: UILabel!
     
     var locationManager = CLLocationManager();
-    
-    var userLocation:CLLocation = CLLocation(latitude: 0, longitude: 0);
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,35 +30,10 @@ class First3DaysController: UIViewController, UITextFieldDelegate, CLLocationMan
         self.locationManager.delegate = self;
         self.locationManager.desiredAccuracy = kCLLocationAccuracyBest;
         self.locationManager.requestWhenInUseAuthorization();
-//        self.locationManager.startUpdatingLocation();
         startTimer(locationManager);
         self.location.addTarget(self, action: "textFieldDidChange:", forControlEvents: UIControlEvents.EditingChanged);
     }
-    
-    func checkAddressFromLocation(){
-        CLGeocoder().reverseGeocodeLocation(userLocation) { (placemarks, error) -> Void in
-            if (error != nil) {
-                print("Reverse geocoder failed");
-                return
-            }
-            
-            if placemarks!.count > 0 {
-                let pm = placemarks![0] as CLPlacemark
-                print(pm.locality);
-                self.location.text = pm.locality!;
-                locationString = self.location.text!;
-                loadWeatherConditions(0, location: self.location, webView: self.webView, label: self.label, viewController: self);
-            }
-        }
-    }
-    
-    @IBAction func updateLocation(sender: AnyObject) {
-        checkAddressFromLocation();
-    }
-    
-    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        userLocation = locations[0];
-    }
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
@@ -88,6 +59,13 @@ class First3DaysController: UIViewController, UITextFieldDelegate, CLLocationMan
         text.resignFirstResponder()
         return true;
     }
-
+    
+    @IBAction func updateLocation(sender: AnyObject) {
+        checkAddressFromLocation(userLocation, location: location, webView: webView, label: label, viewController: self);
+    }
+    
+    func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        userLocation = locations[0];
+    }
 }
 

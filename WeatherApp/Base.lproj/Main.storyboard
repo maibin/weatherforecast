@@ -26,7 +26,8 @@
                                 </textAttributes>
                                 <items>
                                     <navigationItem title="Weather Conditions | Days 1-3" id="O7Z-gd-2Dd">
-                                        <barButtonItem key="rightBarButtonItem" image="navigate.png" style="done" id="CdU-Mi-Ghc">
+                                        <barButtonItem key="rightBarButtonItem" image="Navigate" style="done" id="CdU-Mi-Ghc">
+                                            <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="0.0"/>
                                             <connections>
                                                 <action selector="updateLocation:" destination="9pv-A4-QxB" id="MgN-4L-Rcr"/>
                                             </connections>
@@ -49,7 +50,7 @@
                                 <rect key="frame" x="180" y="289" width="240" height="21"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -113,7 +114,12 @@
                                 </textAttributes>
                                 <items>
                                     <navigationItem title="Weather Conditions | Days 4-6" id="8Y9-cc-M5n">
-                                        <barButtonItem key="rightBarButtonItem" image="navigate.png" style="done" id="0SM-Rf-l2k"/>
+                                        <barButtonItem key="rightBarButtonItem" image="Navigate" style="done" id="0SM-Rf-l2k">
+                                            <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="0.0"/>
+                                            <connections>
+                                                <action selector="updateLocation:" destination="8rJ-Kc-sve" id="CbS-zC-Z4l"/>
+                                            </connections>
+                                        </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -132,7 +138,7 @@
                                 <rect key="frame" x="180" y="289" width="240" height="21"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -193,7 +199,12 @@
                                 </textAttributes>
                                 <items>
                                     <navigationItem title="Weather Conditions | Days 7-10" id="Iao-WZ-elS">
-                                        <barButtonItem key="rightBarButtonItem" image="navigate.png" style="done" id="aT5-Cr-TIW"/>
+                                        <barButtonItem key="rightBarButtonItem" image="Navigate" style="done" id="aT5-Cr-TIW">
+                                            <inset key="imageInsets" minX="0.0" minY="5" maxX="0.0" maxY="0.0"/>
+                                            <connections>
+                                                <action selector="updateLocation:" destination="dUk-gr-Cqg" id="l9B-ya-GOu"/>
+                                            </connections>
+                                        </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
@@ -212,7 +223,7 @@
                                 <rect key="frame" x="180" y="289" width="240" height="21"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
@@ -280,9 +291,9 @@
     </scenes>
     <resources>
         <image name="First" width="25" height="25"/>
+        <image name="Navigate" width="27" height="24"/>
         <image name="Second" width="25" height="25"/>
         <image name="Third" width="25" height="25"/>
-        <image name="navigate.png" width="25" height="25"/>
     </resources>
     <color key="tintColor" red="0.1058823529" green="0.1137254902" blue="0.086274509799999996" alpha="1" colorSpace="calibratedRGB"/>
 </document>
