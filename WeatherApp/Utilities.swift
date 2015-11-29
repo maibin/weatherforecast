@@ -84,7 +84,6 @@ func checkAddressFromLocation(userLocation:CLLocation, location: UITextField, we
         
         if placemarks!.count > 0 {
             let pm = placemarks![0] as CLPlacemark
-            print(pm.locality);
             location.text = pm.locality!;
             locationString = location.text!;
             loadWeatherConditions(0, location: location, webView: webView, label: label, viewController: viewController);
